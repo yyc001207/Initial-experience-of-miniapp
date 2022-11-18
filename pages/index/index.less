@@ -1,0 +1,138 @@
+@width: 100%;
+@height: 100%;
+
+.indexContainer {
+
+	// 轮播图样式
+	.bannerContainer {
+		.banners {
+			width: @width;
+			height: 300rpx;
+
+			image {
+				width: @width;
+				height: @height;
+			}
+
+		}
+	}
+
+	// 图标导航栏
+	.navContainer {
+		display: flex;
+
+		// 图标与文字
+		.navItem {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			width: 20%;
+
+			.iconfont {
+				width: 100rpx;
+				height: 100rpx;
+				border-radius: 50%;
+				text-align: center;
+				line-height: 100rpx;
+				background-color: rgb(240, 19, 19);
+				font-size: 50rpx;
+				color: #fff;
+				margin: 20rpx 0;
+			}
+
+			text {
+				font-size: 26rpx;
+			}
+		}
+	}
+
+	//推荐歌曲
+	.recommendContainer {
+		padding: 20rpx;
+
+		//内容区
+		.recommendScroll {
+			margin-top: 20rpx;
+			display: flex;
+			height: 300rpx;
+
+			.scrollItem {
+				width: 200rpx;
+				margin-right: 20rpx;
+
+				image {
+					width: 200rpx;
+					height: 200rpx;
+					border-radius: 10rpx;
+				}
+
+				text {
+					font-size: 26rpx;
+					// 文本溢出隐藏，省略号代替
+					overflow: hidden;
+					text-overflow: ellipsis;
+					display: -webkit-box;
+					-webkit-box-orient: vertical;
+					-webkit-line-clamp: 2;
+				}
+			}
+		}
+	}
+
+	// 排行榜
+	.topList {
+		padding: 20rpx;
+
+		//内容区
+		.topListSwiper {
+			height: 400rpx;
+
+			swiper-item {
+
+				// 包裹器
+				.swiperItem {
+					width: 96%;
+
+					// 标题
+					.title {
+						font-size: 30rpx;
+						line-height: 80rpx;
+					}
+
+					// 歌曲样式
+					.musicItem {
+						// 后续需要一起改动的样式
+						@square: 100rpx;
+						display: flex;
+						margin-bottom: 20rpx;
+						// 歌曲图片
+
+						image {
+							width: @square;
+							height: @square;
+							border-radius: 6rpx;
+						}
+
+						// 序号
+						.count {
+							width: @square;
+							height: @square;
+							text-align: center;
+							line-height: @square;
+						}
+
+						// 歌曲名
+						.musicName {
+							height: @square;
+							line-height: @square;
+							max-width: 400rpx;
+							white-space: nowrap;
+							overflow: hidden;
+							text-overflow: ellipsis;
+						}
+					}
+				}
+			}
+		}
+	}
+}

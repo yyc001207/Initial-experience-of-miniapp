@@ -1,0 +1,15 @@
+.header .title {
+  font-size: 32rpx;
+  line-height: 80rpx;
+  color: #666;
+}
+.header .neck {
+  font-size: 34rpx;
+}
+.header .neck .more {
+  float: right;
+  border: 1rpx solid #333;
+  padding: 5rpx 15rpx;
+  font-size: 26rpx;
+  border-radius: 30rpx;
+}
