@@ -21,8 +21,19 @@
       >{{item.name}}</view>
     </view>
   </scroll-view>
+  <!-- 回到顶部 -->
+  <image src="/static/images/logo.png" bindtap="toTop" class="toTop" wx:if="{{toTop}}" />
   <!-- 视频列表 -->
-  <scroll-view scroll-y class="videoScroll">
+  <scroll-view
+    scroll-y
+    class="videoScroll"
+    bindrefresherrefresh="handleRefresher"
+    refresher-enabled
+    refresher-triggered="{{isTriggered}}"
+    bindscrolltolower="handleToLower"
+    scroll-top="{{topNum}}"
+    bindscroll="handleToTop"
+  >
     <view class="videoItem" wx:for="{{videoList}}" wx:key="id">
       <!--  -->
       <video

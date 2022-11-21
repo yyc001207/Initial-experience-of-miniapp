@@ -11,6 +11,10 @@ Page({
     videoList: [], // 视频列表
     videoId: '', // 视频标识
     videoUpdateTime: [], // 记录视频播放的时长
+    isTriggered: false,// 标识下拉刷新
+    index: 1,// 分页
+    topNum: 0,// 回到顶部
+    toTop: false// 回到顶部按钮标识
   },
 
   /**
@@ -37,23 +41,24 @@ Page({
       title: '正在加载'
     })
     // 获取视频列表
-    this.getVideoList(this.data.navId) // 根据初始导航id获取初始视频列表数据
+    this.getVideoList(this.data.navId, 1) // 根据初始导航id获取初始视频列表数据
   },
   // 获取视频列表
-  async getVideoList(navId) {
+  async getVideoList(navId, offset) {
     if (!navId) { // 判断导航id是否存在，
       return
     }
     let videoListData = await request('/video/group', {
-      id: navId
+      id: navId,
+      offset
     }) // 获取对应导航id的视频列表数据
     if (!videoListData) {
       console.log('发生错误');
       wx.hideLoading()
     }
-    let index = 0 // 网易不给唯一值，自己添加唯一值
+    // 网易不给唯一值，自己添加唯一值
     let videoList = videoListData.datas.map(item => {
-      item.id = index++
+      item.id = Symbol()
       return item
     })
     let vid = [] // 网易给的数据没有视频地址，需要用另一个接口获取，这里是取保存在视频列表数据中的视频的vid
@@ -71,8 +76,10 @@ Page({
     for (let i = 0; i < videoList.length; i++) {
       videoList[i].data.urlInfo = urlList[i] // 将url保存在视频列表数据中，方便页面获取数据
     }
+    let arr = [...this.data.videoList, ...videoList]
     this.setData({
-      videoList,
+      videoList: arr,
+      isTriggered: false
     })
     setTimeout(() => {
       wx.hideLoading() // 关闭加载动画
@@ -89,7 +96,7 @@ Page({
       title: '正在加载'
     })
     // 动态获取当前导航的数据
-    this.getVideoList(this.data.navId) // 调用获取对应导航id的视频列表 
+    this.getVideoList(this.data.navId, 1) // 调用获取对应导航id的视频列表 
   },
   handlePlay(event) {
     /* 
@@ -144,6 +151,36 @@ Page({
     this.setData({
       videoUpdateTime
     })
+  },
+  // 下拉刷新
+  handleRefresher() {
+    this.getVideoList(this.data.navId, 1)
+  },
+  // 
+  handleToLower() {
+    wx.showLoading({ // 开启加载动画，优化用户体验
+      title: '正在加载'
+    })
+    this.data.index++
+    this.getVideoList(this.data.navId, this.data.index)
+  },
+  // 回到顶部
+  toTop() {
+    this.setData({
+      topNum: 0,
+    })
+  },
+  // 显示与隐藏回到顶部按钮
+  handleToTop(e) {
+    if (e.detail.scrollTop > 1) {
+      this.setData({
+        toTop: true
+      })
+    } else {
+      this.setData({
+        toTop: false
+      })
+    }
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
