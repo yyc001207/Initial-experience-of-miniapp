@@ -6,9 +6,11 @@ Page({
    * 页面的初始数据
    */
   data: {
-    videoGroupList: [],// 导航标签数据
-    navId: '',//导航标识
-    videoList: [],//视频列表
+    videoGroupList: [], // 导航标签数据
+    navId: '', // 导航标识
+    videoList: [], // 视频列表
+    videoId: '', // 视频标识
+    videoUpdateTime: [], // 记录视频播放的时长
   },
 
   /**
@@ -21,8 +23,8 @@ Page({
   // 获取导航数据
   async getVideoGroupListData() {
     let videoGroupList = []
-    let videoGroupListData = await request('/video/group/list')// 服务器请求数据
-    videoGroupListData.data.slice(0, 14).forEach(item => {// 屌毛网易这几个分类不给数据
+    let videoGroupListData = await request('/video/group/list') // 服务器请求数据
+    videoGroupListData.data.slice(0, 14).forEach(item => { // 屌毛网易这几个分类不给数据
       if (item.name !== '万有引力' && item.name !== 'MV') {
         videoGroupList.push(item)
       }
@@ -31,7 +33,7 @@ Page({
       videoGroupList,
       navId: videoGroupListData.data[0].id // 初始导航id，后面随着点击不同改变id 
     })
-    wx.showLoading({// 初始化数据显示前放一个加载动画
+    wx.showLoading({ // 初始化数据显示前放一个加载动画
       title: '正在加载'
     })
     // 获取视频列表
@@ -39,10 +41,16 @@ Page({
   },
   // 获取视频列表
   async getVideoList(navId) {
-    if (!navId) {// 判断导航id是否存在，
+    if (!navId) { // 判断导航id是否存在，
       return
     }
-    let videoListData = await request('/video/group', { id: navId })// 获取对应导航id的视频列表数据
+    let videoListData = await request('/video/group', {
+      id: navId
+    }) // 获取对应导航id的视频列表数据
+    if (!videoListData) {
+      console.log('发生错误');
+      wx.hideLoading()
+    }
     let index = 0 // 网易不给唯一值，自己添加唯一值
     let videoList = videoListData.datas.map(item => {
       item.id = index++
@@ -52,34 +60,90 @@ Page({
     videoList.forEach(item => {
       vid.push(item.data.vid)
     })
-    let i = 0// 循环
-    let urlList = []// 保存所有的url对象的数组
+    let i = 0 // 循环
+    let urlList = [] // 保存所有的url对象的数组
     while (i < vid.length) {
-      let videoUrlData = await request('/video/url', { id: vid[i++] })// 请求视频url
-      urlList.push(videoUrlData.urls[0])// 保存url
+      let videoUrlData = await request('/video/url', {
+        id: vid[i++]
+      }) // 请求视频url
+      urlList.push(videoUrlData.urls[0]) // 保存url
     }
     for (let i = 0; i < videoList.length; i++) {
-      videoList[i].data.urlInfo = urlList[i]// 将url保存在视频列表数据中，方便页面获取数据
+      videoList[i].data.urlInfo = urlList[i] // 将url保存在视频列表数据中，方便页面获取数据
     }
     this.setData({
       videoList,
     })
     setTimeout(() => {
-      wx.hideLoading()// 关闭加载动画
+      wx.hideLoading() // 关闭加载动画
     }, 300)
   },
   // 点击切换导航
   changeNav(event) {
-    let navId = event.currentTarget.id// 获取导航id
+    let navId = event.currentTarget.id // 获取导航id
     this.setData({
       navId,
       videoList: []
     })
-    wx.showLoading({// 开启加载动画，优化用户体验
+    wx.showLoading({ // 开启加载动画，优化用户体验
       title: '正在加载'
     })
     // 动态获取当前导航的数据
-    this.getVideoList(this.data.navId)// 调用获取对应导航id的视频列表 
+    this.getVideoList(this.data.navId) // 调用获取对应导航id的视频列表 
+  },
+  handlePlay(event) {
+    /* 
+        1.点击播放，找到上一个正在播放的视频
+        2.在播放前关闭正在播放的视频
+    */
+    let vid = event.currentTarget.id
+    this.setData({
+      videoId: vid
+    })
+    this.videoContext = wx.createVideoContext(vid)
+    // 判断播放记录
+    let {
+      videoUpdateTime
+    } = this.data
+    let videoItem = videoUpdateTime.find(item => item.vid === vid)
+    if (videoItem) {
+      this.videoContext.seek(videoItem.currentTime)
+    }
+  },
+  handleChangeVid(event) {
+    let vid = event.currentTarget.id
+    this.setData({
+      videoId: vid
+    })
+  },
+  // 监听视频播放进度
+  handleTimeUpdate(event) {
+    let videoTimeObj = {
+      vid: event.currentTarget.id,
+      currentTime: event.detail.currentTime
+    }
+    let {
+      videoUpdateTime
+    } = this.data
+    let videoItem = videoUpdateTime.find(item => item.vid === videoTimeObj.vid)
+    if (videoItem) {
+      videoItem.currentTime = event.detail.currentTime
+    } else {
+      videoUpdateTime.push(videoTimeObj)
+    }
+    this.setData({
+      videoUpdateTime
+    })
+  },
+  // 视频播放结束
+  handleEnded(event) {
+    let {
+      videoUpdateTime
+    } = this.data
+    videoUpdateTime.splice(videoUpdateTime.findIndex(item => item.vid === event.currentTarget.id), 1)
+    this.setData({
+      videoUpdateTime
+    })
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

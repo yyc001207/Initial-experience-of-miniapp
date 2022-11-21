@@ -24,7 +24,27 @@
   <!-- 视频列表 -->
   <scroll-view scroll-y class="videoScroll">
     <view class="videoItem" wx:for="{{videoList}}" wx:key="id">
-      <video bindplay="handlePlay" src="{{item.data.urlInfo.url}}" class="common" />
+      <!--  -->
+      <video
+        wx:if="{{videoId === item.data.vid}}"
+        bindloadedmetadata="handlePlay"
+        autoplay
+        bindtimeupdate="handleTimeUpdate"
+        bindended="handleEnded"
+        object-fit="fill"
+        src="{{item.data.urlInfo.url}}"
+        class="common"
+        id="{{item.data.vid}}"
+        poster="{{item.data.coverUrl}}"
+      />
+      <!-- 性能优化，使用image标签代替video -->
+      <image
+        wx:else
+        src="{{item.data.coverUrl}}"
+        class="common"
+        bindtap="handleChangeVid"
+        id="{{item.data.vid}}"
+      />
       <view class="footer">
         <image class="avatar" src="{{item.data.creator.avatarUrl}}"></image>
         <text class="nickName">{{item.data.creator.nickname}}</text>

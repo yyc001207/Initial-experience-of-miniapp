@@ -31,6 +31,7 @@
 }
 .videoContainer .videoScroll {
   margin-top: 10rpx;
+  height: calc(100vh - 153rpx);
 }
 .videoContainer .videoScroll .videoItem {
   padding: 0 3%;
