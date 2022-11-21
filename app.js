@@ -17,7 +17,7 @@ App({
    * 当小程序从前台进入后台，会触发 onHide
    */
   onHide: function () {
-    wx.removeStorageSync('userInfo')
+    // wx.removeStorageSync('userInfo')
   },
 
   /**
