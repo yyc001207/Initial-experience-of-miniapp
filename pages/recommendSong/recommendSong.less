@@ -1,0 +1,107 @@
+.recommendSongContainer {
+
+    // 头部区域
+    .header {
+        width: 100%;
+        height: 300rpx;
+        position: relative;
+
+        image {
+            width: 100%;
+            height: 100%;
+        }
+
+        @Verticalcenter: 100rpx;
+
+        .date {
+            position: absolute;
+            width: 300rpx;
+            height: @Verticalcenter;
+            color: #fff;
+            text-align: center;
+            line-height: @Verticalcenter;
+            left: 50%;
+            top: 50%;
+            margin-left: -150rpx;
+            margin-top: -50rpx;
+
+            .day {
+                font-size: 38rpx;
+            }
+        }
+    }
+
+    // 内容区
+    .listContainer {
+        position: relative;
+        top: -20rpx;
+
+        padding: 0 20rpx;
+        border-radius: 30rpx;
+        background-color: #fff;
+
+        // 列表头部
+        .listHeader {
+            height: 80rpx;
+            line-height: 80rpx;
+
+            // 多选
+            .changeMore {
+                float: right;
+            }
+        }
+
+        // 列表
+        .listScroll {
+            height: calc(100vh - 380rpx);
+
+            // 列表单项
+            .scrollItem {
+                position: relative;
+                display: flex;
+                margin-bottom: 20rpx;
+
+                // 图片
+                image {
+                    width: 80rpx;
+                    height: 80rpx;
+                    border-radius: 8rpx;
+                }
+
+                // 歌曲信息容器
+                .musicInfo {
+                    display: flex;
+                    flex-direction: column;
+                    margin-left: 20rpx;
+
+                    // 歌曲信息文本
+                    text {
+                        height: 40rpx;
+                        line-height: 40rpx;
+                        font-size: 24rpx;
+                        max-width: 400rpx;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    .musicName {}
+
+                    .author {}
+                }
+
+                // 更多按钮
+                .iconfont {
+                    position: absolute;
+                    width: 80rpx;
+                    height: 80rpx;
+                    line-height: 80rpx;
+                    right: 0;
+                    text-align: right;
+                }
+            }
+
+        }
+
+    }
+}
