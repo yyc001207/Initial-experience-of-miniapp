@@ -156,7 +156,7 @@ Page({
   handleRefresher() {
     this.getVideoList(this.data.navId, 1)
   },
-  // 
+  // 上拉加载
   handleToLower() {
     wx.showLoading({ // 开启加载动画，优化用户体验
       title: '正在加载'
@@ -227,7 +227,17 @@ Page({
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage() {
-
+  onShareAppMessage({ from }) {
+    if (from === 'button') {
+      return {
+        title: '来自button的转发',
+        page: '/pages/video/video',
+      }
+    } else {
+      return {
+        title: '来自menu的转发',
+        page: '/pages/video/video',
+      }
+    }
   }
 })
