@@ -1,3 +1,6 @@
+page {
+  height: 100%;
+}
 .songDetailContainer {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
@@ -59,4 +62,23 @@
   to {
     transform: rotate(360deg);
   }
+}
+.songDetailContainer .musicControl {
+  position: absolute;
+  bottom: 40rpx;
+  left: 0;
+  border-top: 1rpx solid #eee;
+  width: 100%;
+  display: flex;
+}
+.songDetailContainer .musicControl text {
+  width: 20%;
+  height: 120rpx;
+  line-height: 120rpx;
+  text-align: center;
+  color: #fff;
+  font-size: 50rpx;
+}
+.songDetailContainer .musicControl .big {
+  font-size: 80rpx;
 }

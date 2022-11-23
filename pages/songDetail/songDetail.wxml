@@ -1,6 +1,6 @@
 <view class="songDetailContainer">
   <!-- 歌手 -->
-  <view class="author">周杰伦</view>
+  <view class="author">{{song.ar[0].name}}</view>
   <!-- 底座 -->
   <view class="circle"></view>
   <!-- 摇杆 -->
@@ -8,6 +8,17 @@
   <!-- 唱片 -->
   <view class="discContainer {{isPlay&&'discAnimation'}}">
     <image class="disc" src="/static/images/song/disc.png"></image>
-    <image class="musicImg" src="/static/images/test.gif"></image>
+    <image class="musicImg" src="{{song.al.picUrl}}"></image>
+  </view>
+  <!-- 底部控制器 -->
+  <view class="musicControl">
+    <text class="iconfont icon-xunhuanbofang"></text>
+    <text class="iconfont icon-shangyishoushangyige"></text>
+    <text
+      class="iconfont icon-bofang big {{isPlay&&'icon-24gl-pauseCircle'}}"
+      bind:tap="handleMusicPlay"
+    ></text>
+    <text class="iconfont icon-xiayigexiayishou"></text>
+    <text class="iconfont icon-24gl-playlistMusic4"></text>
   </view>
 </view>
