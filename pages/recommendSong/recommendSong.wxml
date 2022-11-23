@@ -27,6 +27,7 @@
         <view class="musicInfo">
           <text class="musicName">{{item.name}}</text>
           <text class="author">{{item.ar[0].name}}</text>
+          <text class="vip" wx:if="{{item.fee==1}}">会员</text>
         </view>
         <text class="iconfont icon-gengduo-shuxiang"></text>
       </view>

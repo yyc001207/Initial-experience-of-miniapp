@@ -4,7 +4,11 @@
   <!-- 底座 -->
   <view class="circle"></view>
   <!-- 摇杆 -->
-  <image class="needle {{isPlay&&'needleRotate'}}" src="/static/images/song/needle.png"></image>
+  <image
+    class="needle {{isPlay&&'needleRotate'}}"
+    src="/static/images/song/needle.png"
+    bind:tap="handleMusicPlay"
+  ></image>
   <!-- 唱片 -->
   <view class="discContainer {{isPlay&&'discAnimation'}}">
     <image class="disc" src="/static/images/song/disc.png"></image>
@@ -13,12 +17,12 @@
   <!-- 底部控制器 -->
   <view class="musicControl">
     <text class="iconfont icon-xunhuanbofang"></text>
-    <text class="iconfont icon-shangyishoushangyige"></text>
+    <text class="iconfont icon-shangyishoushangyige" bind:tap="handleSwitch" id="pre"></text>
     <text
       class="iconfont icon-bofang big {{isPlay&&'icon-24gl-pauseCircle'}}"
       bind:tap="handleMusicPlay"
     ></text>
-    <text class="iconfont icon-xiayigexiayishou"></text>
+    <text class="iconfont icon-xiayigexiayishou" bind:tap="handleSwitch" id="next"></text>
     <text class="iconfont icon-24gl-playlistMusic4"></text>
   </view>
 </view>
