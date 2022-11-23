@@ -1,0 +1,79 @@
+// 全局容器
+.songDetailContainer {
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    // 歌手名
+    .author {}
+
+    .circle {
+        width: 60rpx;
+        height: 60rpx;
+        border-radius: 50%;
+        background-color: #dedede;
+        margin: 10rpx 0;
+        z-index: 10;
+    }
+
+    // 摇杆
+    .needle {
+        position: relative;
+        top: -40rpx;
+        left: 60rpx;
+        width: 192rpx;
+        height: 274rpx;
+        z-index: 9;
+        transform-origin: 40rpx 0;
+        transform: rotate(-20deg);
+        transition: transform 1s;
+    }
+
+    .needleRotate {
+        transform: rotate(0deg);
+    }
+
+    // 唱片
+    .discContainer {
+        position: relative;
+        top: -170rpx;
+        width: 598rpx;
+        height: 598rpx;
+
+        .disc {
+            width: 100%;
+            height: 100%;
+        }
+
+        .musicImg {
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            margin: auto;
+            width: 370rpx;
+            height: 370rpx;
+            border-radius: 50%;
+
+        }
+    }
+
+    // 唱片旋转动画
+    .discAnimation {
+        animation: disc 4s linear infinite;
+        animation-delay: 1s;
+    }
+
+    @keyframes disc {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+}

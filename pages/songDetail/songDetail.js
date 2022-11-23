@@ -5,7 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    isPlay: false,// 是否播放标识
   },
 
   /**
