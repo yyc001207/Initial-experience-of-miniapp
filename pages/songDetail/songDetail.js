@@ -1,16 +1,17 @@
 // pages/songDetail/songDetail.js
 import request from '../../utils/request'
+import PubSub from 'pubsub-js'
 // 获取全局实例
 const appInstance = getApp()
 Page({
-
   /**
    * 页面的初始数据
    */
   data: {
     isPlay: false,// 是否播放标识
     song: {},// 歌曲详情对象
-    songLink: '', // 歌曲地址url
+    musicLink: '', // 歌曲地址url
+    musicId: '',
   },
 
   /**
@@ -18,8 +19,10 @@ Page({
    */
   onLoad(options) {
     let musicId = options.musicId
+    this.setData({
+      musicId
+    })
     this.getMusicDetail(musicId)
-    this.getMusicLink(musicId)
     // 判断音乐是否在播放
     if (appInstance.globalData.isMusicPlay && appInstance.globalData.musicId === musicId) {
       // 修改音乐播放状态为true
@@ -48,7 +51,6 @@ Page({
       isPlay
     })
     appInstance.globalData.isMusicPlay = isPlay
-    this.musicControl(isPlay)
   },
   // 点击播放/暂停
   handleMusicPlay() {
@@ -56,7 +58,8 @@ Page({
     // this.setData({
     //   isPlay
     // })
-    this.musicControl(isPlay)
+    let { musicId, musicLink } = this.data;
+    this.musicControl(isPlay, musicId, musicLink);
   },
   // 获取歌曲详情 
   async getMusicDetail(musicId) {
@@ -68,29 +71,45 @@ Page({
     wx.setNavigationBarTitle({
       title: this.data.song.name
     })
+    // this.getMusicLink(musicId)
   },
   // 获取音乐播放链接
-  async getMusicLink(musicId) {
-    let musicLinkData = await request('/song/url', { id: musicId })
-    this.setData({
-      songLink: musicLinkData.data[0].url
-    })
-  },
+  // async getMusicLink(musicId) {
+
+
+  // },
   // 控制音乐播放/暂停函数
-  musicControl(isPlay) {
+  async musicControl(isPlay, musicId, musicLink) {
     if (isPlay) {// 音乐播放
       // 创建控制实例
-      this.backgroundAudioManager.src = this.data.songLink
+      if (!musicLink) {
+        // 获取音乐播放链接
+        let musicLinkData = await request('/song/url', { id: musicId });
+        musicLink = musicLinkData.data[0].url;
+
+        this.setData({
+          musicLink
+        })
+      }
       this.backgroundAudioManager.title = this.data.song.name
+      this.backgroundAudioManager.src = musicLink
     } else {// 音乐暂停
       this.backgroundAudioManager.pause()
     }
   },
   // 切歌 
   handleSwitch(event) {
+    this.backgroundAudioManager.stop()
     // 获取切歌类型
     let type = event.currentTarget.id
-
+    // 订阅recommendSong页面发布的musicId
+    PubSub.subscribe('musicId', (msg, musicId) => {
+      this.getMusicDetail(musicId)
+      this.musicControl(true, musicId)
+      PubSub.unsubscribe('musicId')
+    })
+    // 发布消息
+    PubSub.publish('switchType', type)
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
