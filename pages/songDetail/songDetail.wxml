@@ -14,6 +14,19 @@
     <image class="disc" src="/static/images/song/disc.png"></image>
     <image class="musicImg" src="{{song.al.picUrl}}"></image>
   </view>
+  <!-- 进度条 -->
+  <view class="progressControl">
+    <text>{{currentTime}}</text>
+    <!-- 进度条载体 -->
+    <view class="bar">
+      <!-- 实时进度 -->
+      <view class="audioCurrentTimeBar" style="width: {{currentWidth + '%'}}">
+        <!-- 小圆球 -->
+        <view class="audioCircle"></view>
+      </view>
+    </view>
+    <text>{{durationTime}}</text>
+  </view>
   <!-- 底部控制器 -->
   <view class="musicControl">
     <text class="iconfont icon-xunhuanbofang"></text>

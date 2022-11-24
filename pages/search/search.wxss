@@ -1,0 +1,29 @@
+.searchContainer .header {
+  display: flex;
+  height: 60rpx;
+  line-height: 60rpx;
+  padding: 10rpx;
+}
+.searchContainer .header .searchInput {
+  position: relative;
+  flex: 1;
+  background-color: rgba(237, 237, 237, 0.3);
+  border-radius: 30rpx;
+  border: 1px solid red;
+}
+.searchContainer .header .searchInput .searchIcon {
+  position: absolute;
+  left: 15rpx;
+}
+.searchContainer .header .searchInput input {
+  margin-left: 50rpx;
+  height: 100%;
+}
+.searchContainer .header .searchInput .input-placeholder {
+  color: #d43c33;
+  font-size: 28rpx;
+}
+.searchContainer .header .cancel {
+  width: 100rpx;
+  text-align: center;
+}

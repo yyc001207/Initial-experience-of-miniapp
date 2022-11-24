@@ -1,6 +1,7 @@
 // pages/songDetail/songDetail.js
 import request from '../../utils/request'
 import PubSub from 'pubsub-js'
+import moment from 'moment'
 // 获取全局实例
 const appInstance = getApp()
 Page({
@@ -11,7 +12,10 @@ Page({
     isPlay: false,// 是否播放标识
     song: {},// 歌曲详情对象
     musicLink: '', // 歌曲地址url
-    musicId: '',
+    musicId: '',// 歌曲id
+    currentTime: '00:00',// 歌曲播放实时时长
+    durationTime: '00:00',// 歌曲总时长
+    currentWidth: 0,// 实时进度条长度
   },
 
   /**
@@ -44,6 +48,26 @@ Page({
     this.backgroundAudioManager.onStop(() => {
       this.changePlayState(false)
     })
+    // 监听播放进度
+    this.backgroundAudioManager.onTimeUpdate(() => {
+      let currentTime = moment(this.backgroundAudioManager.currentTime * 1000).format('mm:ss')
+      let currentWidth = this.backgroundAudioManager.currentTime / this.backgroundAudioManager.duration * 100
+      this.setData({
+        currentTime,
+        currentWidth
+      })
+    })
+    // 监听播放结束
+    this.backgroundAudioManager.onEnded(() => {
+      // 切换至下一首音乐
+      this.publishData()
+      PubSub.publish('switchType', 'next')
+      // 还原进度条
+      this.setData({
+        currentWidth: 0,
+        currentTime: '00:00'
+      })
+    })
   },
   // 修改状态的功能函数
   changePlayState(isPlay) {
@@ -64,20 +88,23 @@ Page({
   // 获取歌曲详情 
   async getMusicDetail(musicId) {
     let songData = await request('/song/detail', { ids: musicId })
+    let durationTime = moment(songData.songs[0].dt).format('mm:ss')
+    if (songData.songs[0].fee == 1) {
+      durationTime = moment(30000).format('mm:ss')
+      wx.showToast({
+        title: '会员歌曲试听30秒',
+        icon: 'none'
+      })
+    }
     this.setData({
-      song: songData.songs[0]
+      song: songData.songs[0],
+      durationTime
     })
     // 动态修改标题
     wx.setNavigationBarTitle({
       title: this.data.song.name
     })
-    // this.getMusicLink(musicId)
   },
-  // 获取音乐播放链接
-  // async getMusicLink(musicId) {
-
-
-  // },
   // 控制音乐播放/暂停函数
   async musicControl(isPlay, musicId, musicLink) {
     if (isPlay) {// 音乐播放
@@ -103,13 +130,17 @@ Page({
     // 获取切歌类型
     let type = event.currentTarget.id
     // 订阅recommendSong页面发布的musicId
+    this.publishData()
+    // 发布消息
+    PubSub.publish('switchType', type)
+  },
+  // 消息发布
+  publishData() {
     PubSub.subscribe('musicId', (msg, musicId) => {
       this.getMusicDetail(musicId)
       this.musicControl(true, musicId)
       PubSub.unsubscribe('musicId')
     })
-    // 发布消息
-    PubSub.publish('switchType', type)
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

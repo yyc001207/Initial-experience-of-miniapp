@@ -42,6 +42,21 @@ Page({
       })
     }
   },
+  toRecommendSong() {
+    wx.navigateTo({
+      url: "/pages/recommendSong/recommendSong"
+    })
+  },
+  toSongDetail(event) {
+    let { tracks, index } = event.currentTarget.dataset
+    this.setData({
+      index
+    })
+    // query参数传参
+    wx.navigateTo({
+      url: `/pages/songDetail/songDetail?musicId=${tracks[0].id}`
+    })
+  },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
