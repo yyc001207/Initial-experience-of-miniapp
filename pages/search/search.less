@@ -1,11 +1,12 @@
 .searchContainer {
+    padding: 0 20rpx;
 
     // 头部
     .header {
         display: flex;
         height: 60rpx;
         line-height: 60rpx;
-        padding: 10rpx;
+        padding: 10rpx 0;
 
         // 搜索框
         .searchInput {
@@ -23,10 +24,18 @@
             input {
                 margin-left: 50rpx;
                 height: 100%;
+                font-size: 28rpx;
+            }
+
+            .clear {
+                position: absolute;
+                right: 30rpx;
+                top: 0;
+                font-size: 30rpx;
+                z-index: 99;
             }
 
             .input-placeholder {
-                color: #d43c33;
                 font-size: 28rpx;
             }
         }
@@ -35,6 +44,106 @@
         .cancel {
             width: 100rpx;
             text-align: center;
+        }
+    }
+
+    // 热搜榜
+    .hotContainer {
+
+
+        .title {
+            font-size: 28rpx;
+            height: 80rpx;
+            line-height: 80rpx;
+            border-bottom: 1rpx solid #eee;
+        }
+
+        .hotList {
+            display: flex;
+            flex-wrap: wrap;
+
+            .hotItem {
+                width: 50%;
+                height: 80rpx;
+                line-height: 80rpx;
+                font-size: 28rpx;
+
+                .order {
+                    margin: 0 10rpx;
+                }
+
+                .iconImage {
+                    width: 35rpx;
+                    height: 20rpx;
+                    margin-left: 10rpx;
+                }
+
+                .name {}
+            }
+        }
+    }
+
+    // 搜索内容展示
+    .showSearchContent {
+        .searchContent {
+            color: #d43c33;
+            height: 80rpx;
+            line-height: 80rpx;
+            font-size: 24rpx;
+            border-bottom: 1rpx solid #d43c33;
+        }
+
+        .searchList {
+            .searchItem {
+                height: 80rpx;
+                line-height: 80rpx;
+                display: flex;
+
+                .content {
+                    flex: 1;
+                    margin-left: 20rpx;
+                    border-bottom: 1rpx solid #eee;
+                    font-size: 26rpx;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                }
+            }
+        }
+    }
+
+    // 搜索历史记录
+    .history {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        margin: 20rpx 0;
+
+        .title {
+            height: 50rpx;
+            line-height: 50rpx;
+            font-size: 28rpx;
+        }
+
+        .historyItem {
+            height: 50rpx;
+            line-height: 50rpx;
+            font-size: 26rpx;
+            background-color: #ededed;
+            margin: 0 0 20rpx 20rpx;
+            border-radius: 20rpx;
+            padding: 0 30rpx;
+            max-width: 200rpx;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .delete {
+            position: absolute;
+            bottom: 10rpx;
+            right: 15rpx;
+            font-size: 36rpx;
         }
     }
 }

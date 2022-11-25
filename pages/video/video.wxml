@@ -2,7 +2,7 @@
   <!-- 头部区域 -->
   <view class="header">
     <image src="/static/images/video/video.jpg"></image>
-    <view class="search">搜索</view>
+    <view class="search" bind:tap="toSearch">搜索</view>
     <image src="/static/images/logo.png"></image>
   </view>
   <!-- 导航栏 -->
